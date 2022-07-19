@@ -4,8 +4,9 @@
 enum AlarmeState {S_DESARMADO = 1, S_ARMADO, S_ALARME};
 AlarmeState estado = S_DESARMADO;
 
-//Pino do receptor IR
+//Pino do receptor IR e buzzer
 const int RECV_PIN = 10;
+const int pinBuzzer = 11;
 
 //Pinagem dos LEDs e do sensor
 const int pinSensor = 3;
@@ -25,6 +26,7 @@ void setup() {
   pinMode(ledVerde, OUTPUT);
   pinMode(ledAmarelo, OUTPUT);
   pinMode(ledVermelho, OUTPUT);
+  pinMode(pinBuzzer, OUTPUT);
   
   Serial.begin(9600);
   irrecv.enableIRIn(); //Inicializa o receptor IR
@@ -39,9 +41,10 @@ void loop() {
   }
   switch(estado){
     case S_DESARMADO:
-      if(results.value == 0xAF548B7 || results.value == 0xFF6897){ //Se botao 1 for pressionado, muda o estado para armado
+      if(results.value == 0xAF548B7 || results.value == 0xFF10EF){ //Se botao 7 for pressionado, muda o estado para armado
         estado = S_ARMADO;
       }
+    digitalWrite(pinBuzzer, LOW);
     digitalWrite(ledVerde, HIGH);
     digitalWrite(ledAmarelo, LOW);
     digitalWrite(ledVermelho, LOW);
@@ -51,7 +54,7 @@ void loop() {
       if(digitalRead(pinSensor)){
         estado = S_ALARME;
       }
-      if(results.value == 0xAF5A857 || results.value == 0xFF9867){ //Se botao 2 for pressionado, muda o estado para desarmado
+      if(results.value == 0xAF5A857 || results.value == 0xFF18E7){ //Se botao 5 for pressionado, muda o estado para desarmado
         estado = S_DESARMADO;
       }
     digitalWrite(ledVerde, LOW);
@@ -60,9 +63,9 @@ void loop() {
     break;
     
     case S_ALARME:
-    //tone(pinBuzzer, 500, 100);
-    //analogWrite(pinBuzzer, 127);
-    if(results.value == 0xAF5A857 || results.value == 0xFF9867){
+    tone(pinBuzzer, 500, 100);
+    digitalWrite(pinBuzzer, HIGH);
+    if(results.value == 0xAF5A857 || results.value == 0xFF18E7){
       estado = S_DESARMADO;
     }
     digitalWrite(ledVerde, LOW);
