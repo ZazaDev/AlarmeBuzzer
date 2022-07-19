@@ -48,6 +48,7 @@ void loop() {
     digitalWrite(ledVerde, HIGH);
     digitalWrite(ledAmarelo, LOW);
     digitalWrite(ledVermelho, LOW);
+    irrecv.resume(); //Le o próximo valor
     break;
     
     case S_ARMADO:
@@ -60,6 +61,7 @@ void loop() {
     digitalWrite(ledVerde, LOW);
     digitalWrite(ledAmarelo, HIGH);
     digitalWrite(ledVermelho, LOW);
+    irrecv.resume();
     break;
     
     case S_ALARME:
@@ -71,7 +73,8 @@ void loop() {
     digitalWrite(ledVerde, LOW);
     digitalWrite(ledAmarelo, LOW);
     digitalWrite(ledVermelho, HIGH);
+    irrecv.resume();
     break;
   }
-  irrecv.resume(); //Le o próximo valor
+  //irrecv.resume(); //Le o próximo valor
 }
